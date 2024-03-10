@@ -28,7 +28,7 @@ def process_word_list(file_path, file):
                 definition = get_definition(word)
                 break
             except Exception as e:
-                print(f"oopsie doopsie retry")
+                print(f"Error obteniendo definicion, reintentando...")
                 retries -= 1
                 if retries == 0:
                     definition = "Definición no encontrada"
