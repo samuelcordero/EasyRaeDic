@@ -15,21 +15,21 @@ def get_definition(word):
     else:
         return "Definición no encontrada"
 
-def process_word_list(file_path):
+def process_word_list(file_path, file):
     with open(file_path, 'r', encoding='utf-8') as f:
         words = f.read().splitlines()
-
-    word_definitions = {}
+    i = 0
+    total_words = len(words)
     for word in words:
         definition = get_definition(word)
-        word_definitions[word] = definition
-    return word_definitions
+        file.write(f"{word}: {definition}\n")
+        i += 1
+        if (i % 100 == 0):
+            print(f"Hechas {i} definiciones de {total_words} palabras")
 
 if __name__ == "__main__":
     file_path = "rae_words.txt"
-    word_definitions = process_word_list(file_path)
     file_out = "full_rae_dic.txt"
     with open(file_out, 'w', encoding='utf-8') as f:
-        for word, definition in word_definitions.items():
-            f.write(f"{word}: {definition}\n")
+        process_word_list(file_path, f)
 
