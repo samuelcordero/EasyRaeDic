@@ -1,3 +1,4 @@
+import time
 import requests
 from bs4 import BeautifulSoup
 
@@ -21,7 +22,18 @@ def process_word_list(file_path, file):
     i = 0
     total_words = len(words)
     for word in words:
-        definition = get_definition(word)
+        retries = 3
+        while retries > 0:
+            try:
+                definition = get_definition(word)
+                break
+            except Exception as e:
+                print(f"oopsie doopsie retry")
+                retries -= 1
+                if retries == 0:
+                    definition = "Definición no encontrada"
+                else:
+                    time.sleep(5)
         file.write(f"{word}: {definition}\n")
         i += 1
         if (i % 100 == 0):
@@ -29,7 +41,7 @@ def process_word_list(file_path, file):
 
 if __name__ == "__main__":
     file_path = "rae_words.txt"
-    file_out = "full_rae_dic.txt"
+    file_out = "rae_words_with_def.txt"
     with open(file_out, 'w', encoding='utf-8') as f:
         process_word_list(file_path, f)
 
